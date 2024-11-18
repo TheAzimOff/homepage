@@ -11,7 +11,7 @@ import {
 
 const Sidebar = () => {
   return (
-    <nav className="flex h-full p-4 py-8 text-2xl text-white">
+    <nav className="flex h-full p-4 py-8 text-2xl text-zinc-300">
       <div className="flex h-full flex-col items-center justify-between">
         <Link href="/">
           <FiHome />

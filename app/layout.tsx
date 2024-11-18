@@ -8,7 +8,7 @@ const hostGrtesk = Host_Grotesk({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Homepage",
-  description: "Modern Next.js Component Library",
+  description: "A tool with useful shortcuts",
 };
 
 export default function RootLayout({
