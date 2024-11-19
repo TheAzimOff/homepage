@@ -13,7 +13,7 @@ enum Unit {
 const Weather = () => {
   const [loading, setLoading] = useState(true);
   const [userCity] = useLocalStorage("userCity", "London");
-  const [units] = useLocalStorage<"metric" | "imperial">("units", "imperial");
+  const [units] = useLocalStorage<"metric" | "imperial">("units", "metric");
   const [weatherData, setWeatherData] = useState<WeatherDataType>();
 
   useEffect(() => {
@@ -23,7 +23,6 @@ const Weather = () => {
       await fetch(url)
         .then((response) => response.json())
         .then((data) => {
-          console.dir(data);
           setWeatherData({
             city: data.name,
             type: data.weather[0].main,

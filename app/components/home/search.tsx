@@ -45,7 +45,6 @@ const Search = () => {
               ? shortcuts.map((shortcut, i) => (
                   <a
                     target="_blank"
-                    // referrerPolicy="no-referrer"
                     key={shortcut.id}
                     href={
                       shortcut.url.startsWith("http")

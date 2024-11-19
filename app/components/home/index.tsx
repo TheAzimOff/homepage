@@ -1,4 +1,4 @@
-import Gmail from "./gmail";
+import GmailContainer from "./gmailContainer";
 import Search from "./search";
 import Weather from "./weather";
 import Welcome from "./welcome";
@@ -11,7 +11,7 @@ const HomeIndex = () => {
       </div>
       <div className="flex w-full flex-[4] flex-row items-start justify-between gap-16">
         <Search />
-        <Gmail />
+        <GmailContainer />
       </div>
     </div>
   );
