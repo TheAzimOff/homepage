@@ -36,7 +36,9 @@ const Gmail = ({
 }: GmailProps) => {
   return (
     <div className="relative h-full w-1/2 rounded-lg bg-zinc-950 px-6 py-4 text-zinc-300">
-      {!loading && !signedIn ? (
+      {loading ? (
+        <Loading />
+      ) : !loading && !signedIn ? (
         <div className="flex h-full w-full flex-col items-center justify-center">
           <div className="mb-4 text-center text-2xl">
             Login for showing your latest emails

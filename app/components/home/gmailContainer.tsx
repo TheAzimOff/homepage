@@ -1,6 +1,5 @@
 //@ts-nocheck
 "use client";
-import { gapi } from "gapi-script";
 import { useCallback, useEffect, useState } from "react";
 import Gmail from "./gmail";
 import { extractEmailInfo } from "@/lib/utils";
@@ -19,34 +18,49 @@ const GmailContainer = () => {
   const [messagesIds, setMessagesIds] = useState([]);
   const [emails, setEmails] = useState([]);
 
+  const [gapi, setGapi] = useState(null);
+
+  // Checking if component running on client side and if so, load gapi
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      import("gapi-script").then((module) => {
+        setGapi(module.gapi);
+      });
+    }
+  }, []);
+
   useEffect(() => {
     setLoading(true);
-    gapi.load("client:auth2", function () {
-      gapi.auth2.init({ client_id: CLIENT_ID }).then((googleAuth) => {
-        loadClient();
-        if (gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile()) {
-          setUserId(
-            gapi.auth2
-              .getAuthInstance()
-              .currentUser.get()
-              .getBasicProfile()
-              .getId(),
-          );
-          setUserEmail(
-            gapi.auth2
-              .getAuthInstance()
-              .currentUser.get()
-              .getBasicProfile()
-              .getEmail(),
-          );
-        }
-        if (googleAuth.isSignedIn.get()) {
-          setSignedIn(true);
-        }
+    if (gapi) {
+      gapi.load("client:auth2", function () {
+        gapi.auth2.init({ client_id: CLIENT_ID }).then((googleAuth) => {
+          loadClient();
+          if (
+            gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile()
+          ) {
+            setUserId(
+              gapi.auth2
+                .getAuthInstance()
+                .currentUser.get()
+                .getBasicProfile()
+                .getId(),
+            );
+            setUserEmail(
+              gapi.auth2
+                .getAuthInstance()
+                .currentUser.get()
+                .getBasicProfile()
+                .getEmail(),
+            );
+          }
+          if (googleAuth.isSignedIn.get()) {
+            setSignedIn(true);
+          }
+        });
       });
-    });
-    setLoading(false);
-  }, [signedIn, CLIENT_ID]);
+      setLoading(false);
+    }
+  }, [gapi, signedIn, CLIENT_ID]);
 
   const listMessages = useCallback(() => {
     setLoading(true);

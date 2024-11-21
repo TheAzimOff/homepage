@@ -25,6 +25,10 @@ export default function ShortcutModal({
       if (event.key === "Escape") {
         setIsModalOpen(false);
       }
+      if (event.key === "Enter") {
+        console.log("Enter pressed");
+        handleSave();
+      }
     };
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -56,7 +60,7 @@ export default function ShortcutModal({
         url,
       );
     const isValidTitle = title.length !== 0;
-
+    console.log(isValidTitle, isValidUrl);
     if (isValidTitle && isValidUrl) {
       setShortcuts((prevValues) => [
         ...prevValues,
@@ -66,7 +70,9 @@ export default function ShortcutModal({
           url,
         },
       ]);
-      // setIsModalOpen(false);
+      setIsModalOpen(false);
+      setTitle("");
+      setUrl("");
     }
 
     if (!isValidTitle) {
