@@ -70,3 +70,9 @@ export type ShortcutType = {
   title: string;
   url: string;
 };
+
+export type UserContextType = {
+  userCity: string;
+  isVisible: boolean;
+  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+};

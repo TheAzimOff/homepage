@@ -12,11 +12,16 @@ enum Unit {
 
 const Weather = () => {
   const [loading, setLoading] = useState(true);
-  const [userCity] = useLocalStorage("userCity", "London");
+  const [error, setError] = useState("");
+  const [userCity] = useLocalStorage("userCity", "");
   const [units] = useLocalStorage<"metric" | "imperial">("units", "metric");
   const [weatherData, setWeatherData] = useState<WeatherDataType>();
 
   useEffect(() => {
+    if (typeof window === undefined || userCity === "") {
+      return;
+    }
+
     async function getWeather() {
       setLoading(true);
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${userCity}&units=${units}&APPID=f8482c208c6d5f73b7a45157bdd459d4`;
@@ -34,6 +39,10 @@ const Weather = () => {
             icon: data.weather[0].icon,
           });
           setLoading(false);
+        })
+        .catch((error) => {
+          setError(error.message);
+          setLoading(false);
         });
     }
     getWeather();
@@ -43,6 +52,8 @@ const Weather = () => {
     <div className="flex min-w-96 items-center">
       {loading ? (
         <Loading />
+      ) : error ? (
+        <div>{error}</div>
       ) : (
         <>
           <div className="mx-4 aspect-square h-24">

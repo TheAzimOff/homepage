@@ -1,34 +1,62 @@
 import { useState, useEffect } from "react";
 
-function useLocalStorage<T>(
-  key: string,
-  initialValue: T,
-): [T, React.Dispatch<React.SetStateAction<T>>] {
-  // Initialize state with the initial value first
+const isBrowser = typeof window !== "undefined";
+
+function useLocalStorage<T>(key: string, initialValue: T) {
+  // Always initialize with the initialValue first
   const [storedValue, setStoredValue] = useState<T>(initialValue);
 
-  // On mount (client-side), update the state with the localStorage value if it exists
+  // Once the component mounts, hydrate the state from localStorage
   useEffect(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      if (item) {
-        setStoredValue(JSON.parse(item));
+    if (isBrowser) {
+      try {
+        const item = window.localStorage.getItem(key);
+        if (item) {
+          setStoredValue(JSON.parse(item));
+        }
+      } catch (error) {
+        console.error(`Error reading localStorage key "${key}":`, error);
       }
-    } catch (error) {
-      console.error(error);
     }
-  }, []); // Empty dependency array means this runs once on mount
+  }, [key]);
 
-  // Update local storage whenever the stored value changes
-  useEffect(() => {
+  const setValue = (value: T | ((val: T) => T)) => {
+    if (!isBrowser) {
+      console.warn(`Tried to set localStorage key "${key}" during SSR`);
+      return;
+    }
+
     try {
-      window.localStorage.setItem(key, JSON.stringify(storedValue));
+      // Allow value to be a function so we have same API as useState
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
+
+      // Save state
+      setStoredValue(valueToStore);
+
+      // Save to local storage
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
-      console.error(error);
+      console.error(`Error setting localStorage key "${key}":`, error);
     }
-  }, [storedValue]);
+  };
 
-  return [storedValue, setStoredValue];
+  // Listen for changes in other tabs/windows
+  useEffect(() => {
+    if (!isBrowser) {
+      return;
+    }
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === key && e.newValue !== null) {
+        setStoredValue(JSON.parse(e.newValue));
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, [key]);
+
+  return [storedValue, setValue] as const;
 }
-
 export default useLocalStorage;

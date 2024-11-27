@@ -58,7 +58,6 @@ const GmailContainer = () => {
           }
         });
       });
-      setLoading(false);
     }
   }, [gapi, signedIn, CLIENT_ID]);
 
@@ -171,7 +170,9 @@ const GmailContainer = () => {
 
   return (
     <Gmail
-      emails={emails}
+      emails={emails.sort(
+        (a, b) => parseInt(b.internalDate) - parseInt(a.internalDate),
+      )}
       userEmail={userEmail}
       handleLogout={handleLogout}
       reloadEmails={listEmails}

@@ -3,6 +3,7 @@ import { Host_Grotesk } from "next/font/google";
 import "./globals.css";
 import Sidebar from "./components/sidebar";
 import { cn } from "./lib/utils";
+import { Providers } from "./contextProviders";
 
 const hostGrtesk = Host_Grotesk({ subsets: ["latin"] });
 
@@ -21,12 +22,14 @@ export default function RootLayout({
       <body
         className={cn("bg-background text-foreground", hostGrtesk.className)}
       >
-        <div className="flex h-screen w-full">
-          <aside className="w-14">
-            <Sidebar />
-          </aside>
-          <main className="h-full w-full">{children}</main>
-        </div>
+        <Providers>
+          <div className="flex h-screen w-full">
+            <aside className="w-14">
+              <Sidebar />
+            </aside>
+            <main className="h-full w-full">{children}</main>
+          </div>
+        </Providers>
       </body>
     </html>
   );
