@@ -28,7 +28,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link href="/image">
+            <Link href="/images">
               <FiImage />
             </Link>
           </li>
