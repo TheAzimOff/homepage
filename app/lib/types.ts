@@ -1,3 +1,5 @@
+import React from "react";
+
 export type Size = "sm" | "md" | "lg";
 export type Variant = "primary" | "secondary" | "ghost" | "danger";
 export type InputType = "text" | "email" | "password" | "number";

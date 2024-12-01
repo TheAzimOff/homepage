@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState } from "react";
+import React, { createContext, useState } from "react";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { UserContextType } from "./lib/types";
 

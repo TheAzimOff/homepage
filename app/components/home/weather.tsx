@@ -45,7 +45,7 @@ const Weather = () => {
           setLoading(false);
         });
     }
-    getWeather();
+    getWeather().catch(error => console.error(error.message));
   }, [userCity, units]);
 
   return (

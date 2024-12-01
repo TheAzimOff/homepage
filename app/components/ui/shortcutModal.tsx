@@ -105,6 +105,7 @@ export default function ShortcutModal({
                 type="text"
                 id="name"
                 value={title}
+                autoFocus={true}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full rounded-md border border-zinc-600 bg-transparent px-4 py-2 outline-none placeholder:text-zinc-300 focus:border-zinc-300"
               />

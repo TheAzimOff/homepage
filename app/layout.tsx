@@ -4,6 +4,7 @@ import "./globals.css";
 import Sidebar from "./components/sidebar";
 import { cn } from "./lib/utils";
 import { Providers } from "./contextProviders";
+import React from "react";
 
 const hostGrtesk = Host_Grotesk({ subsets: ["latin"] });
 

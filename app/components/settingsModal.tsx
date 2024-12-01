@@ -1,4 +1,4 @@
-const SettingsModal = ({ isVisible, setIsVisible }) => {
+const SettingsModal = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
