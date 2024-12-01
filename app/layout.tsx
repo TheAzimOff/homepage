@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Host_Grotesk } from "next/font/google";
 import "./globals.css";
 import Sidebar from "./components/sidebar";
-import { cn } from "./lib/utils";
-import { Providers } from "./contextProviders";
+import { cn } from "./lib/utils/cn";
 import React from "react";
 
-const hostGrtesk = Host_Grotesk({ subsets: ["latin"] });
+const HostGrotesk = Host_Grotesk({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Homepage",
@@ -21,16 +20,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn("bg-background text-foreground", hostGrtesk.className)}
+        className={cn("bg-background text-foreground", HostGrotesk.className)}
       >
-        <Providers>
           <div className="flex h-screen w-full">
             <aside className="w-14">
               <Sidebar />
             </aside>
             <main className="h-full w-full">{children}</main>
           </div>
-        </Providers>
       </body>
     </html>
   );

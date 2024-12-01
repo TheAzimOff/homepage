@@ -1,4 +1,4 @@
-import Shortcuts from "./shortcuts";
+import ShortcutsContainer from "./shortcutsContainer";
 import GoogleSearch from "./googleSearch";
 
 const Search = () => {
@@ -6,7 +6,7 @@ const Search = () => {
     <>
       <div className="w-1/2 rounded-lg bg-zinc-950 p-6">
         <GoogleSearch />
-        <Shortcuts />
+        <ShortcutsContainer />
       </div>
     </>
   );

@@ -16,8 +16,7 @@ import {
   WiNightFog,
 } from "react-icons/wi";
 import { FC } from "react";
-import { IconBaseProps } from "react-icons";
-import { WeatherCode } from "@/lib/types";
+import { WeatherIconProps } from "@/lib/types";
 
 // Map weather codes to their corresponding icons
 const WEATHER_ICONS = {
@@ -40,10 +39,6 @@ const WEATHER_ICONS = {
   "50d": WiFog,
   "50n": WiNightFog,
 };
-
-interface WeatherIconProps extends IconBaseProps {
-  iconCode: WeatherCode;
-}
 
 export const WeatherIcon: FC<WeatherIconProps> = ({ iconCode, ...props }) => {
   const IconComponent = WEATHER_ICONS[iconCode];

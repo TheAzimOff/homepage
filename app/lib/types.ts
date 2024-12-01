@@ -1,33 +1,5 @@
 import React from "react";
-
-export type Size = "sm" | "md" | "lg";
-export type Variant = "primary" | "secondary" | "ghost" | "danger";
-export type InputType = "text" | "email" | "password" | "number";
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: Variant;
-  size?: Size;
-  label: string;
-  icon?: React.ReactNode;
-  fullWidth?: boolean;
-}
-
-export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
-  label: string;
-  error?: string;
-  size?: Size;
-  helperText?: string;
-}
-
-export interface CardProps {
-  title?: string;
-  children: React.ReactNode;
-  className?: string;
-  headerAction?: React.ReactNode;
-  footer?: React.ReactNode;
-}
+import { IconBaseProps } from "react-icons";
 
 export type WeatherDataType = {
   city: string;
@@ -66,15 +38,41 @@ export type WeatherCode =
   | "13n"
   | "50d"
   | "50n";
+export interface WeatherIconProps extends IconBaseProps {
+  iconCode: WeatherCode;
+}
 
 export type ShortcutType = {
-  id: number;
+  id: string;
   title: string;
   url: string;
 };
-
-export type UserContextType = {
-  userCity: string;
-  isVisible: boolean;
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+export type ShortcutProps = {
+  shortcuts: ShortcutType[];
+  index: number;
+  setShortcuts: React.Dispatch<React.SetStateAction<ShortcutType[]>>;
+  shortcut: ShortcutType;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDefaultModalValues: React.Dispatch<React.SetStateAction<ShortcutType>>;
+};
+export type GmailProps = {
+  emails: {
+    id: string;
+    threadId: string;
+    internalDate: string;
+    subject: string;
+    snippet: string;
+    date: string;
+    from: string;
+    unRead: boolean;
+    senderName: string;
+    senderEmail: string;
+  }[];
+  userEmail: string;
+  signedIn: string;
+  loading: boolean;
+  handleLogout: () => void;
+  reloadEmails: () => void;
+  markAsRead: (id: string) => void;
+  handleAuth: () => void;
 };

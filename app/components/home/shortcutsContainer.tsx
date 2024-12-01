@@ -6,23 +6,24 @@ import { FiPlus } from "react-icons/fi";
 import ShortcutModal from "../ui/shortcutModal";
 import Shortcut from "./shortcut";
 
-export default function Shortcuts() {
+export default function ShortcutsContainer() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [shortcuts, setShortcuts] = useLocalStorage<ShortcutType[]>(
     "shortcuts",
     [],
   );
+  const [defaultModalValues, setDefaultModalValues] = useState<ShortcutType>({title: '', id: '', url: ''})
 
   return (
     <div className="grid grid-cols-2 overflow-hidden rounded-md">
       {isModalOpen && (
-        <ShortcutModal {...{ isModalOpen, setIsModalOpen, setShortcuts }} />
+        <ShortcutModal {...{ isModalOpen, setIsModalOpen, shortcuts, setShortcuts, defaultModalValues, setDefaultModalValues }} />
       )}
 
       {shortcuts.length !== 0 &&
         shortcuts.map((shortcut, index) => (
           <Shortcut
-            {...{ index, shortcuts, setShortcuts, shortcut }}
+            {...{ index, shortcuts, setShortcuts, shortcut, defaultModalValues, setDefaultModalValues, setIsModalOpen }}
             key={shortcut.id}
           />
         ))}

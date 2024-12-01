@@ -2,7 +2,7 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import Gmail from "./gmail";
-import { extractEmailInfo } from "@/lib/utils";
+import { extractEmailInfo } from "@/lib/utils/extractEmailInfo";
 
 const GmailContainer = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;

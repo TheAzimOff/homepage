@@ -1,28 +1,7 @@
-import { getDayAndMonth } from "@/lib/utils";
+import { getDayAndMonth } from "@/lib/utils/getDayAndMonth";
 import { FiRefreshCw, FiLogOut, FiExternalLink } from "react-icons/fi";
 import Loading from "../ui/loading";
-
-interface GmailProps {
-  emails: {
-    id: string;
-    threadId: string;
-    internalDate: string;
-    subject: string;
-    snippet: string;
-    date: string;
-    from: string;
-    unRead: boolean;
-    senderName: string;
-    senderEmail: string;
-  }[];
-  userEmail: string;
-  signedIn: string;
-  loading: boolean;
-  handleLogout: () => void;
-  reloadEmails: () => void;
-  markAsRead: (id: string) => void;
-  handleAuth: () => void;
-}
+import { GmailProps } from "@/lib/types";
 
 const Gmail = ({
   emails,

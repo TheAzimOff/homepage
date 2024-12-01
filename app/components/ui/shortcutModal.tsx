@@ -1,21 +1,24 @@
-"use client";
-
 import { ShortcutType } from "@/lib/types";
 import React, { useState, useRef, useEffect, FormEvent } from "react";
+import { generateShortcutId } from "@/lib/utils/generateShortcutId";
 
 interface ShortcutModalProps {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setShortcuts: React.Dispatch<React.SetStateAction<ShortcutType[]>>;
+  defaultModalValues: ShortcutType;
+  setDefaultModalValues: React.Dispatch<React.SetStateAction<ShortcutType>>;
 }
 
 export default function ShortcutModal({
   isModalOpen,
   setIsModalOpen,
   setShortcuts,
+  setDefaultModalValues,
+  defaultModalValues
 }: ShortcutModalProps) {
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState(defaultModalValues.title);
+  const [url, setUrl] = useState(defaultModalValues.url);
   const modalRef = useRef<HTMLDivElement>(null);
   const [urlError, setUrlError] = useState(false);
   const [titleError, setTitleError] = useState(false);
@@ -45,39 +48,58 @@ export default function ShortcutModal({
       document.removeEventListener("keydown", handleEscape);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isModalOpen]);
+  }, [isModalOpen, setIsModalOpen]);
+
+  const validateUrl = (inputUrl: string): boolean =>
+    /\b(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/[^ ]*)?\b/g.test(inputUrl);
 
   const handleSave = (e: FormEvent) => {
     e.preventDefault();
+
+    // Reset previous errors
     setUrlError(false);
     setTitleError(false);
 
-    const isValidUrl =
-      /\b(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/[^ ]*)?\b/g.test(
-        url,
-      );
-    const isValidTitle = title.length !== 0;
+    // Validate inputs
+    const isValidTitle = title.trim().length > 0;
+    const isValidUrl = validateUrl(url);
 
-    if (isValidTitle && isValidUrl) {
-      setShortcuts((prevValues) => [
-        ...prevValues,
-        {
-          id: prevValues.length,
-          title,
-          url,
-        },
-      ]);
-      setIsModalOpen(false);
-      setTitle("");
-      setUrl("");
+    // Validate before processing
+    if (!isValidTitle || !isValidUrl) {
+      // Set specific errors
+      !isValidTitle && setTitleError(true);
+      !isValidUrl && setUrlError(true)
+      return;
     }
 
-    if (!isValidTitle) {
-      setTitleError(true);
-    }
-    if (!isValidUrl) {
-      setUrlError(true);
-    }
+    // Determine if we're adding a new shortcut or updating existing
+    const isNewShortcut = defaultModalValues.id === "";
+
+    // Prepare shortcut data
+    const shortcutData = {
+      title,
+      url
+    };
+
+    // Update shortcuts based on whether it's a new or existing shortcut
+    setShortcuts(prevShortcuts =>
+      isNewShortcut
+        ? [...prevShortcuts, {
+          id: generateShortcutId(),
+          ...shortcutData
+        }]
+        : prevShortcuts.map(shortcut =>
+          shortcut.id === defaultModalValues.id
+            ? { ...shortcut, ...shortcutData }
+            : shortcut
+        )
+    );
+
+    // Reset modal state
+    setIsModalOpen(false);
+    setTitle("");
+    setUrl("");
+    setDefaultModalValues({ title: '', url: '', id: '' });
   };
 
   return (

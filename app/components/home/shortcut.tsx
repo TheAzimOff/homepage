@@ -1,27 +1,24 @@
-import { ShortcutType } from "@/lib/types";
+import { ShortcutProps } from "@/lib/types";
 import { MdOutlineDelete, MdOutlineModeEdit } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Shortcut({
   shortcuts,
   index,
   setShortcuts,
   shortcut,
-}: {
-  shortcuts: ShortcutType[];
-  index: number;
-  setShortcuts: React.Dispatch<React.SetStateAction<ShortcutType[]>>;
-  shortcut: ShortcutType;
-}) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  setIsModalOpen,
+  setDefaultModalValues,
+}: ShortcutProps) {
+  const [isOptionsVisible, setIsOptionsVisible] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const optionsButtonRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsModalOpen(false);
+        setIsOptionsVisible(false);
       }
     };
 
@@ -31,11 +28,11 @@ export default function Shortcut({
         !optionsButtonRef.current?.contains(event.target as Node) &&
         !modalRef.current.contains(event.target as Node)
       ) {
-        setIsModalOpen(false);
+        setIsOptionsVisible(false);
       }
     };
 
-    if (isModalOpen) {
+    if (isOptionsVisible) {
       document.addEventListener("keydown", handleEscape);
       document.addEventListener("mousedown", handleClickOutside);
     }
@@ -44,17 +41,22 @@ export default function Shortcut({
       document.removeEventListener("keydown", handleEscape);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isModalOpen]);
+  }, [isOptionsVisible]);
 
-  const handleDelete = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    index: number,
-  ) => {
-    event.preventDefault();
-    setIsModalOpen(false);
-    console.log(index);
-    console.log(shortcuts[index]);
-    setShortcuts((prevValues) => prevValues.splice(index, 1));
+  const handleDelete = (id: string) => {
+    setIsOptionsVisible(false);
+    const newShortcuts = shortcuts.filter((item) => item.id !== id);
+    setShortcuts(newShortcuts);
+  };
+
+  const handleEdit = () => {
+    setIsOptionsVisible(false);
+    setDefaultModalValues({
+      title: shortcut.title,
+      url: shortcut.url,
+      id: shortcut.id,
+    });
+    setIsModalOpen(true);
   };
 
   return (
@@ -84,17 +86,26 @@ export default function Shortcut({
         </div>
         <div className="cursor-pointer">
           <div
-            className={`absolute bottom-1 right-12 text-sm ${isModalOpen ? "" : "hidden"} flex flex-col rounded bg-zinc-900 shadow-sm shadow-zinc-600`}
+            className={`absolute bottom-1 right-12 text-sm ${isOptionsVisible ? "" : "hidden"} flex flex-col rounded bg-zinc-900 shadow-sm shadow-zinc-600`}
             ref={modalRef}
           >
             <button
               className="flex items-center p-1 px-2 transition-colors hover:bg-zinc-800"
-              onClick={(e) => handleDelete(e, index)}
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete(shortcut.id);
+              }}
             >
               <MdOutlineDelete className="text-red-500" />
               Remove
             </button>
-            <button className="flex items-center p-1 px-2 transition-colors hover:bg-zinc-800">
+            <button
+              className="flex items-center p-1 px-2 transition-colors hover:bg-zinc-800"
+              onClick={(e) => {
+                e.preventDefault();
+                handleEdit();
+              }}
+            >
               <MdOutlineModeEdit />
               Edit Shortcut
             </button>
@@ -103,7 +114,7 @@ export default function Shortcut({
             className="rounded-full p-2 transition-colors hover:bg-zinc-400"
             onClick={(e) => {
               e.preventDefault();
-              setIsModalOpen(!isModalOpen);
+              setIsOptionsVisible(!isOptionsVisible);
             }}
             ref={optionsButtonRef}
           >
