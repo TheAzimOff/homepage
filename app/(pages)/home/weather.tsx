@@ -2,8 +2,8 @@
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { WeatherDataType } from "@/lib/types";
 import { useEffect, useState } from "react";
-import Loading from "../ui/loading";
-import { WeatherIcon } from "../ui/weatherIcon";
+import Loading from "@/components/ui/loading";
+import { WeatherIcon } from "@/components/ui/weatherIcon";
 
 enum Unit {
   "metric" = "°C",
@@ -45,7 +45,7 @@ const Weather = () => {
           setLoading(false);
         });
     }
-    getWeather().catch(error => console.error(error.message));
+    getWeather().catch((error) => console.error(error.message));
   }, [userCity, units]);
 
   return (

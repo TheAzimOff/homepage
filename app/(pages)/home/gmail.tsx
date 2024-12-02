@@ -1,6 +1,6 @@
 import { getDayAndMonth } from "@/lib/utils/getDayAndMonth";
 import { FiRefreshCw, FiLogOut, FiExternalLink } from "react-icons/fi";
-import Loading from "../ui/loading";
+import Loading from "@/components/ui/loading";
 import { GmailProps } from "@/lib/types";
 
 const Gmail = ({
@@ -14,7 +14,7 @@ const Gmail = ({
   handleAuth,
 }: GmailProps) => {
   return (
-    <div className="relative h-full w-1/2 rounded-lg bg-zinc-950 px-6 py-4 text-zinc-300">
+    <div className="relative h-full w-1/2 rounded-lg bg-zinc-900/70 px-6 py-4 text-zinc-300 backdrop-blur-sm">
       {loading ? (
         <Loading />
       ) : !loading && !signedIn ? (
@@ -36,11 +36,11 @@ const Gmail = ({
             <Loading />
           ) : (
             <div className="mails relative h-[calc(100vh/12*8)]">
-              <ul className="emails h-full divide-y divide-zinc-700 overflow-y-scroll pb-8">
+              <ul className="emails h-[calc(100%-32px)] divide-y divide-zinc-700 overflow-y-scroll">
                 {emails.map((email) => (
                   <li
                     key={email.id}
-                    className="cursor-pointer bg-zinc-900 p-4 transition-colors hover:bg-zinc-800"
+                    className="cursor-pointer bg-zinc-900/70 p-4 transition-colors hover:bg-zinc-800"
                     onClick={() => markAsRead(email.id)}
                   >
                     <a
@@ -77,7 +77,7 @@ const Gmail = ({
               </ul>
             </div>
           )}
-          <div className="absolute bottom-4 left-0 flex w-full flex-row justify-between bg-zinc-950 px-8 text-lg">
+          <div className="absolute bottom-4 left-0 flex w-full flex-row justify-between px-8 text-lg">
             <div className="flex flex-row gap-4">
               <button title="Refresh" onClick={reloadEmails}>
                 <FiRefreshCw />

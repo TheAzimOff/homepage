@@ -69,7 +69,7 @@ export default function Shortcut({
           : `https://${shortcut.url}`
       }
       rel="noopener noreferrer"
-      className={`relative cursor-pointer border-zinc-800 bg-zinc-900 p-4 transition-colors hover:bg-zinc-800 ${index % 2 === 0 ? "border-r" : ""} ${(index % 2 !== 0 && index + 1 <= shortcuts.length) || index + 2 <= shortcuts.length ? "border-b" : ""} border-zinc-800`}
+      className={`relative cursor-pointer border-zinc-800 bg-zinc-800/5 p-4 backdrop-blur-sm transition-colors hover:bg-zinc-600/80 ${index % 2 === 0 ? "border-r" : ""} ${(index % 2 !== 0 && index + 1 <= shortcuts.length) || index + 2 <= shortcuts.length ? "border-b" : ""}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">

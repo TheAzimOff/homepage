@@ -55,7 +55,7 @@ function useLocalStorage<T>(key: string, initialValue: T) {
 
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, [key]);
+  }, [key, storedValue]);
 
   return [storedValue, setValue] as const;
 }

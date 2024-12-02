@@ -4,6 +4,7 @@ import "./globals.css";
 import Sidebar from "./components/sidebar";
 import { cn } from "./lib/utils/cn";
 import React from "react";
+import Wrapper from "./components/ui/wrapper";
 
 const HostGrotesk = Host_Grotesk({ subsets: ["latin"] });
 
@@ -22,12 +23,12 @@ export default function RootLayout({
       <body
         className={cn("bg-background text-foreground", HostGrotesk.className)}
       >
-          <div className="flex h-screen w-full">
-            <aside className="w-14">
-              <Sidebar />
-            </aside>
-            <main className="h-full w-full">{children}</main>
-          </div>
+        <Wrapper>
+          <aside className="w-14">
+            <Sidebar />
+          </aside>
+          <main className="h-full w-full">{children}</main>
+        </Wrapper>
       </body>
     </html>
   );

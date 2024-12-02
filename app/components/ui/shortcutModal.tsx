@@ -15,7 +15,7 @@ export default function ShortcutModal({
   setIsModalOpen,
   setShortcuts,
   setDefaultModalValues,
-  defaultModalValues
+  defaultModalValues,
 }: ShortcutModalProps) {
   const [title, setTitle] = useState(defaultModalValues.title);
   const [url, setUrl] = useState(defaultModalValues.url);
@@ -51,7 +51,9 @@ export default function ShortcutModal({
   }, [isModalOpen, setIsModalOpen]);
 
   const validateUrl = (inputUrl: string): boolean =>
-    /\b(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/[^ ]*)?\b/g.test(inputUrl);
+    /\b(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/[^ ]*)?\b/g.test(
+      inputUrl,
+    );
 
   const handleSave = (e: FormEvent) => {
     e.preventDefault();
@@ -65,10 +67,13 @@ export default function ShortcutModal({
     const isValidUrl = validateUrl(url);
 
     // Validate before processing
-    if (!isValidTitle || !isValidUrl) {
+    if (!isValidTitle) {
       // Set specific errors
-      !isValidTitle && setTitleError(true);
-      !isValidUrl && setUrlError(true)
+      setTitleError(true);
+      return;
+    }
+    if (!isValidUrl) {
+      setUrlError(true);
       return;
     }
 
@@ -78,35 +83,38 @@ export default function ShortcutModal({
     // Prepare shortcut data
     const shortcutData = {
       title,
-      url
+      url,
     };
 
     // Update shortcuts based on whether it's a new or existing shortcut
-    setShortcuts(prevShortcuts =>
+    setShortcuts((prevShortcuts) =>
       isNewShortcut
-        ? [...prevShortcuts, {
-          id: generateShortcutId(),
-          ...shortcutData
-        }]
-        : prevShortcuts.map(shortcut =>
-          shortcut.id === defaultModalValues.id
-            ? { ...shortcut, ...shortcutData }
-            : shortcut
-        )
+        ? [
+            ...prevShortcuts,
+            {
+              id: generateShortcutId(),
+              ...shortcutData,
+            },
+          ]
+        : prevShortcuts.map((shortcut) =>
+            shortcut.id === defaultModalValues.id
+              ? { ...shortcut, ...shortcutData }
+              : shortcut,
+          ),
     );
 
     // Reset modal state
     setIsModalOpen(false);
     setTitle("");
     setUrl("");
-    setDefaultModalValues({ title: '', url: '', id: '' });
+    setDefaultModalValues({ title: "", url: "", id: "" });
   };
 
   return (
-    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50 p-4">
+    <div className="fixed inset-0 z-10 flex items-center justify-center bg-opacity-50 p-4">
       <div
         ref={modalRef}
-        className="mx-auto w-full max-w-md rounded-lg bg-zinc-800/50 text-zinc-300 shadow-xl backdrop-blur"
+        className="mx-auto w-full max-w-md rounded-lg bg-zinc-800/50 text-zinc-300 shadow-xl backdrop-blur-sm"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
